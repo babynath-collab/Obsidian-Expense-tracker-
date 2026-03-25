@@ -1,0 +1,78 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique user ID from Firebase Auth" },
+        "displayName": { "type": "string", "description": "User's display name" },
+        "email": { "type": "string", "description": "User's email address" },
+        "photoURL": { "type": "string", "description": "User's profile photo URL" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Account creation timestamp" },
+        "monthlyBudget": { "type": "number", "description": "Global monthly budget limit" },
+        "currency": { "type": "string", "description": "User's preferred currency symbol" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "A single expense entry",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique expense ID" },
+        "uid": { "type": "string", "description": "Owner's user ID" },
+        "amount": { "type": "number", "description": "Expense amount" },
+        "category": { "type": "string", "description": "Category ID or name" },
+        "date": { "type": "string", "format": "date-time", "description": "When the expense occurred" },
+        "note": { "type": "string", "description": "Optional note" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the record was created" }
+      },
+      "required": ["uid", "amount", "category", "date"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Expense category definition",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique category ID" },
+        "uid": { "type": "string", "description": "Owner's user ID (null for predefined)" },
+        "name": { "type": "string", "description": "Category name" },
+        "icon": { "type": "string", "description": "Lucide icon name" },
+        "color": { "type": "string", "description": "Hex color or tailwind color class" }
+      },
+      "required": ["name", "icon", "color"]
+    },
+    "Budget": {
+      "title": "Budget",
+      "description": "Monthly budget for a specific category",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "description": "Unique budget ID" },
+        "uid": { "type": "string", "description": "Owner's user ID" },
+        "categoryId": { "type": "string", "description": "Category this budget applies to" },
+        "amount": { "type": "number", "description": "Budget limit" },
+        "month": { "type": "string", "description": "Month in YYYY-MM format" }
+      },
+      "required": ["uid", "categoryId", "amount", "month"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": "User",
+      "description": "User profile documents"
+    },
+    "/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "All expense records"
+    },
+    "/categories/{categoryId}": {
+      "schema": "Category",
+      "description": "Global and custom categories"
+    },
+    "/budgets/{budgetId}": {
+      "schema": "Budget",
+      "description": "User category budgets"
+    }
+  }
+}
